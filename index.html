@@ -114,6 +114,47 @@
             </div>
         </section>
 
+        <!-- Envio de Documentos para Análise de Compliance -->
+        <section id="envio-documentos" class="mb-5">
+            <h2><i class="fas fa-upload"></i> Envio de Documentos para Análise de Compliance</h2>
+            <div class="card">
+                <div class="card-header">Envie Documentos para Revisão Jurídica</div>
+                <div class="card-body">
+                    <p class="text-muted">Envie contratos, prontuários anonimizados ou relatórios para análise de conformidade com LGPD e normas hospitalares. Arquivos até 10MB.</p>
+                    <form id="uploadForm">
+                        <div class="mb-3">
+                            <label for="documentFile" class="form-label">Selecionar Arquivo</label>
+                            <input type="file" class="form-control" id="documentFile" accept=".pdf,.doc,.docx,.txt" multiple required aria-describedby="fileHelp">
+                            <div id="fileHelp" class="form-text">Suportados: PDF, DOC, DOCX, TXT. Anonimize dados sensíveis antes do envio.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentDescription" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="documentDescription" rows="3" placeholder="Descreva o documento (ex.: Contrato de prestação de serviços médicos)" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priority" class="form-label">Prioridade</label>
+                            <select class="form-select" id="priority">
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar para Análise</button>
+                    </form>
+                    <hr>
+                    <h5>Documentos Enviados</h5>
+                    <ul class="list-group" id="documentList">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Contrato_Hospital_2023.pdf <span class="badge bg-warning">Em Análise</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Prontuario_Anonimizado.docx <span class="badge bg-success">Aprovado</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <!-- Relatórios -->
         <section id="relatorios" class="mb-5">
             <h2><i class="fas fa-chart-bar"></i> Relatórios</h2>
