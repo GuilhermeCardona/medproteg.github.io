@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Medproteg - Hospital São Lucas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+        .sidebar { background-color: #007bff; color: white; min-height: 100vh; position: fixed; width: 250px; transition: width 0.3s; }
+        .sidebar.collapsed { width: 70px; }
+        .sidebar a { color: white; text-decoration: none; display: block; padding: 15px; }
+        .sidebar a:hover { background-color: #0056b3; }
+        .main-content { margin-left: 250px; padding: 20px; transition: margin-left 0.3s; }
+        .main-content.expanded { margin-left: 70px; }
+        .card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .gauge-container { position: relative; width: 200px; height: 200px; margin: 0 auto; }
+        .alert-custom { background-color: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        .compliance-section { background-color: #e7f3ff; padding: 20px; border-radius: 10px; }
+        .chatbot { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); display: none; z-index: 1000; }
+        .chatbot-header { background: #007bff; color: white; padding: 10px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { height: 300px; overflow-y: auto; padding: 10px; }
+        .chat-input { padding: 10px; border-top: 1px solid #ddd; }
+        .fab { position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; z-index: 1001; }
+        @media (max-width: 768px) { .sidebar { width: 100%; position: relative; } .main-content { margin-left: 0; } .chatbot { width: 90%; right: 5%; } }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-3">
+            <h4><i class="fas fa-shield-alt"></i> Medproteg</h4>
+            <button class="btn btn-light btn-sm mt-3" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        </div>
+        <nav>
+            <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+            <a href="#compliance"><i class="fas fa-gavel"></i> <span>Compliance Jurídico</span></a>
+            <a href="#envio-documentos"><i class="fas fa-upload"></i> <span>Envio de Documentos</span></a>
+            <a href="#auditorias"><i class="fas fa-search"></i> <span>Auditorias</span></a>
+            <a href="#relatorios"><i class="fas fa-chart-bar"></i> <span>Relatórios</span></a>
+            <a href="#alertas"><i class="fas fa-exclamation-triangle"></i> <span>Alertas</span></a>
+            <a href="#configuracoes"><i class="fas fa-cog"></i> <span>Configurações</span></a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <header class="mb-4">
+            <h1><i class="fas fa-hospital"></i> Dashboard do Cliente - Hospital São Lucas</h1>
+            <p class="text-muted">Foco em segurança jurídica, LGPD e compliance hospitalar personalizado.</p>
+        </header>
+
+        <!-- Dashboard Overview -->
+        <section id="dashboard" class="mb-5">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card compliance-section">
+                        <div class="card-body text-center">
+                            <h5>Score de Compliance</h5>
+                            <div class="gauge-container">
+                                <canvas id="complianceGauge" aria-label="Score de Compliance: 85%"></canvas>
+                            </div>
+                            <p class="mt-2">85% - Nível Alto</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Resumo de Atividades</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6><i class="fas fa-file-alt"></i> Relatórios Gerados</h6>
+                                    <p>12 este mês</p>
+                                </div>
+                                <div class="col-6">
+                                    <h6><i class="fas fa-user-shield"></i> Auditorias Concluídas</h6>
+                                    <p>5 pendentes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compliance Jurídico -->
+        <section id="compliance" class="mb-5">
+            <h2><i class="fas fa-gavel"></i> Compliance Jurídico</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">LGPD - Tratamento de Dados Pessoais</div>
+                        <div class="card-body">
+                            <p>Gestão de dados de pacientes: Consentimentos coletados, anonimização aplicada.</p>
+                            <ul>
+                                <li>Dados sensíveis: Prontuários médicos protegidos.</li>
+                                <li>Relatório de conformidade: 95% aderente.</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#lgpdModal">Ver Detalhes</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Riscos Hospitalares</div>
+                        <div class="card-body">
+                            <canvas id="riskChart" aria-label="Gráfico de Riscos"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Envio de Documentos para Análise de Compliance -->
+        <section id="envio-documentos" class="mb-5">
+            <h2><i class="fas fa-upload"></i> Envio de Documentos para Análise de Compliance</h2>
+            <div class="card">
+                <div class="card-header">Envie Documentos para Revisão Jurídica</div>
+                <div class="card-body">
+                    <p class="text-muted">Envie contratos, prontuários anonimizados ou relatórios para análise de conformidade com LGPD e normas hospitalares. Arquivos até 10MB.</p>
+                    <form id="uploadForm">
+                        <div class="mb-3">
+                            <label for="documentFile" class="form-label">Selecionar Arquivo</label>
+                            <input type="file" class="form-control" id="documentFile" accept=".pdf,.doc,.docx,.txt" multiple required aria-describedby="fileHelp">
+                            <div id="fileHelp" class="form-text">Suportados: PDF, DOC, DOCX, TXT. Anonimize dados sensíveis antes do envio.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentDescription" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="documentDescription" rows="3" placeholder="Descreva o documento (ex.: Contrato de prestação de serviços médicos)" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priority" class="form-label">Prioridade</label>
+                            <select class="form-select" id="priority">
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar para Análise</button>
+                    </form>
+                    <hr>
+                    <h5>Documentos Enviados</h5>
+                    <ul class="list-group" id="documentList">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Contrato_Hospital_2023.pdf <span class="badge bg-warning">Em Análise</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Prontuario_Anonimizado.docx <span class="badge bg-success">Aprovado</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relatórios -->
+        <section id="relatorios" class="mb-5">
+            <h2><i class="fas fa-chart-bar"></i> Relatórios</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Relatórios Mensais de Compliance</div>
+                        <div class="card-body">
+                            <canvas id="monthlyReportChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alertas -->
+        <section id="alertas" class="mb-5">
+            <h2><i class="fas fa-exclamation-triangle"></i> Alertas</h2>
+            <div class="alert alert-custom">
+                <strong>Atenção:</strong> Possível vazamento de dados em prontuários médicos. Verifique conformidade com LGPD.
+            </div>
+            <div class="alert alert-danger">
+                <strong>Risco Alto:</strong> Auditoria pendente para segurança jurídica em contratos hospitalares.
+            </div>
+        </section>
+    </div>
+
+    <!-- Botão Flutuante -->
+    <button class="fab" id="fabBtn"><i class="fas fa-robot"></i></button>
+
+    <!-- Chatbot -->
+    <div class="chatbot" id="chatbot">
+        <div class="chatbot-header">
+            <h5><i class="fas fa-robot"></i> Bot LGPD 24h</h5>
+            <button class="btn-close btn-close-white" id="closeChatbot"></button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <p><strong>Bot:</strong> Olá! Sou o assistente LGPD. Pergunte-me algo!</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" class="form-control" id="chatInput" placeholder="Digite sua pergunta...">
+            <button class="btn btn-primary mt-2" id="sendBtn">Enviar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle Sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('expanded');
+        });
+
+        // Gauge Chart (Compliance)
+        new Chart(document.getElementById('complianceGauge'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [85, 15],
+                    backgroundColor: ['#28a745', '#e9ecef'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            }
+        });
+
+        // Risk Chart
+        new Chart(document.getElementById('riskChart'), {
+            type: 'bar',
+            data: {
+                labels: ['LGPD', 'Sanitárias', 'Contratuais', 'Cibernéticas'],
+                datasets: [{
+                    label: 'Nível de Risco',
+                    data: [3, 2, 4, 5],
+                    backgroundColor: ['#ffc107', '#17a2b8', '#28a745', '#dc3545']
+                }]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true, max: 5 } } }
+        });
+
+        // Monthly Report Chart
+        new Chart(document.getElementById('monthlyReportChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Conformidade (%)',
+                    data: [70, 75, 80, 82, 85, 90],
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0,123,255,0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+
+        // Chatbot LGPD
+        const fab = document.getElementById('fabBtn');
+        const chatbot = document.getElementById('chatbot');
+        const closeBtn = document.getElementById('closeChatbot');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        fab.addEventListener('click', () => chatbot.style.display = 'block');
+        closeBtn.addEventListener('click', () => chatbot.style.display = 'none');
+
+        const respostas = {
+            "lgpd": "A LGPD é a Lei Geral de Proteção de Dados, que regula o tratamento de dados pessoais no Brasil.",
+            "anonimizar": "Anonimizar é remover informações que identifiquem o paciente, protegendo sua privacidade.",
+            "consentimento": "O consentimento deve ser livre, informado e explícito antes de tratar dados pessoais.",
+            "dados sensíveis": "Dados de saúde, biometria e religião são considerados sensíveis e exigem proteção reforçada."
+        };
+
+        sendBtn.addEventListener('click', () => {
+            const pergunta = chatInput.value.trim().toLowerCase();
+            if (!pergunta) return;
+            chatMessages.innerHTML += `<p><strong>Você:</strong> ${pergunta}</p>`;
+            const resposta = Object.keys(respostas).find(k => pergunta.includes(k));
+            chatMessages.innerHTML += `<p><strong>Bot:</strong> ${resposta ? respostas[resposta] : "Desculpe, não entendi. Tente perguntar sobre LGPD, anonimização ou consentimento."}</p>`;
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    </script>
+</body>
+</html>
